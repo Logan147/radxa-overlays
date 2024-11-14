@@ -30,6 +30,7 @@ dtb-$(CONFIG_ARCH_MESON) += \
  	meson-g12-spi-b-mcp2515-8mhz.dtbo \
 	meson-g12-spi-b-spidev.dtbo \
 	meson-g12-spi-gpio-enc28j60.dtbo \
+	meson-g12-spi-st7789.dtbo \
 	meson-g12-uart-ao-a.dtbo \
 	meson-g12-uart-ao-b-23.dtbo \
 	meson-g12-uart-ao-b-89.dtbo \

@@ -1,0 +1,64 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/gpio/meson-g12a-gpio.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+/ {
+	metadata {
+		title = "WaveshareST7789";
+		compatible = "radxa,zero";
+		category = "misc";
+		// 所用的所有引脚名称
+		exclusive = "spicc1", "GPIOH_4", "GPIOH_6", "GPIOH_7", "GPIOAO_3", "GPIOX_8";
+		//添加所用的引脚
+		description = "WaveshareST7789";
+	};
+};
+
+&spicc1 {
+	pinctrl-0 = <&spicc1_pins>;
+	pinctrl-names = "default";
+	// 没有触屏只保留一个cs引脚
+	cs-gpios = <&gpio GPIOH_6 GPIO_ACTIVE_LOW>;
+	//前一个是屏幕的cs引脚  后面是触摸屏cs引脚
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	//修改为st7789v屏幕的驱动
+	st7789v: st7789v@0 {
+		compatible = "sitronix,st7789v";
+		reg = <0>;
+		spi-max-frequency = <12000000>;
+		//spi速率
+		//txbuflen = <32768>;
+		rotate = <90>;
+		//bgr = <0>;
+		//rgb;
+		fps = <50>;
+		buswidth = <8>;
+		regwidth = <8>;
+		width = <170>;
+		height = <320>;
+		reset-gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_LOW>;
+		//reset所用引脚
+		dc-gpios = <&gpio GPIOX_8 GPIO_ACTIVE_HIGH>;
+		//dc所用引脚
+		debug = <0>; 
+	};
+
+
+};
+
+
+//微雪电子st7789屏幕
+//B-spi
+//     ###屏幕引脚###								#####开发板引脚######
+//显示屏 ：st7789v
+//LCD_RS （PIN18:DC）					DC引脚       （PIN18：GPIOX_8）
+//RST    （PIN22：RESET）				RESET引脚    （PIN7：GPIOAO_3）
+//LCD_SI （PIN19：MOSI）   				MOSI引脚     （PIN19：GPIOH_4）
+//LCD_SCK（PIN23：SCLK）					SCLK引脚     （PIN23：GPIOH_7）
+//LCD_CS （PING24：SS）					SS引脚		  （PIN24：GPIOH_6）
+
+// 内核还要把st7789v驱动编译进去
